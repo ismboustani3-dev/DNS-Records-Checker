@@ -1,601 +1,300 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DNS Records Checker</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>TEAM SYSTEM PRO MAX</title>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
+body{background:#0b1220;color:white;display:flex}
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-body{
-font-family:'Inter',sans-serif;
-background:#050510;
-color:white;
-height:100vh;
-overflow:hidden;
-}
-
-body::before{
-content:'';
-position:fixed;
-inset:0;
-background:
-radial-gradient(circle at top left,#2448ff33,transparent 30%),
-radial-gradient(circle at bottom right,#7b2cff33,transparent 30%);
-z-index:-1;
-}
-
-.container{
-display:flex;
-height:100vh;
-padding:30px;
-gap:25px;
-}
-
+/* SIDEBAR */
 .sidebar{
-width:380px;
-display:flex;
-flex-direction:column;
-gap:25px;
+  width:240px;height:100vh;background:#0f172a;
+  padding:20px;position:fixed;display:flex;flex-direction:column
 }
-
-.card{
-background:rgba(255,255,255,0.03);
-border:1px solid rgba(255,255,255,0.06);
-backdrop-filter:blur(12px);
-border-radius:22px;
-padding:22px;
-box-shadow:0 10px 30px rgba(0,0,0,.4);
+.logo{font-size:20px;font-weight:bold;margin-bottom:20px}
+.menu{flex:1}
+.menu div{
+  padding:12px;margin:8px 0;border-radius:10px;
+  cursor:pointer;color:#9ca3af
 }
-
-h1{
-font-size:50px;
-font-weight:800;
-line-height:1;
-margin-bottom:10px;
+.menu div:hover{background:#1f2937;color:white}
+.logout{
+  padding:12px;margin-top:auto;border-radius:10px;
+  cursor:pointer;background:#1f2937;color:#ef4444;text-align:center
 }
+.logout:hover{background:#dc2626;color:white}
 
-.subtitle{
-color:#8ca0d7;
-font-size:18px;
-margin-bottom:25px;
+/* MAIN */
+.main{margin-left:240px;padding:20px;width:100%}
+.box{background:#111827;padding:20px;border-radius:12px;margin-top:15px}
+input{
+  width:100%;padding:10px;margin:5px 0;border:none;
+  border-radius:8px;background:#0f172a;color:white
 }
-
-.label{
-font-size:14px;
-margin-bottom:10px;
-color:#b8c3f3;
-font-weight:600;
-display:block;
-}
-
-textarea{
-width:100%;
-height:240px;
-background:#050510;
-border:1px solid rgba(255,255,255,0.08);
-border-radius:16px;
-padding:16px;
-color:white;
-font-size:15px;
-outline:none;
-resize:none;
-margin-bottom:20px;
-}
-
-.option{
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:rgba(255,255,255,0.03);
-border:1px solid rgba(255,255,255,0.05);
-padding:16px 18px;
-border-radius:16px;
-margin-bottom:14px;
-}
-
-.option span{
-font-size:15px;
-font-weight:600;
-}
-
-.switch{
-width:52px;
-height:28px;
-background:#3f3f46;
-border-radius:50px;
-position:relative;
-cursor:pointer;
-transition:.3s;
-}
-
-.switch.active{
-background:linear-gradient(90deg,#2463ff,#6547ff);
-}
-
-.switch::before{
-content:'';
-position:absolute;
-top:3px;
-left:4px;
-width:22px;
-height:22px;
-background:white;
-border-radius:50%;
-transition:.3s;
-}
-
-.switch.active::before{
-left:26px;
-}
-
 button{
-width:100%;
-border:none;
-padding:18px;
-border-radius:18px;
-font-size:17px;
-font-weight:700;
-cursor:pointer;
-color:white;
-background:linear-gradient(90deg,#2463ff,#6547ff);
-transition:.25s;
-margin-top:10px;
-box-shadow:0 10px 30px rgba(70,80,255,.3);
+  padding:8px 12px;background:#2563eb;border:none;
+  border-radius:8px;color:white;cursor:pointer;margin-top:5px
 }
-
-button:hover{
-transform:translateY(-2px);
+.card{
+  background:#0f172a;padding:12px;margin-top:10px;
+  border-radius:10px
 }
-
-.stats{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
+.section{display:none}
+.section.active{display:block}
+.small-btn{
+  background:#ef4444;padding:4px 8px;margin-top:5px;
+  border-radius:6px;font-size:12px
 }
-
-.stat{
-background:rgba(255,255,255,0.03);
-border:1px solid rgba(255,255,255,0.05);
-border-radius:18px;
-padding:25px;
-text-align:center;
-}
-
-.stat h2{
-font-size:40px;
-margin-bottom:8px;
-}
-
-.stat p{
-font-size:13px;
-color:#8997c9;
-font-weight:600;
-letter-spacing:1px;
-}
-
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-.progress-box{
-margin-top:20px;
-margin-bottom:20px;
-}
-
-.progress-top{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-font-size:14px;
-color:#8ca0d7;
-font-weight:600;
-}
-
-.progress{
-height:8px;
-background:rgba(255,255,255,0.06);
-border-radius:50px;
-overflow:hidden;
-}
-
-.progress-bar{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#2463ff,#6547ff);
-border-radius:50px;
-transition:.3s;
-}
-
-.filters{
-display:flex;
-gap:10px;
-margin-bottom:18px;
-}
-
-.filter-btn{
-padding:10px 18px;
-border-radius:12px;
-border:1px solid rgba(255,255,255,0.08);
-background:rgba(255,255,255,0.03);
-color:#c7d2fe;
-cursor:pointer;
-font-size:14px;
-font-weight:600;
-}
-
-.filter-btn.active{
-background:linear-gradient(90deg,#2463ff,#6547ff);
-color:white;
-}
-
-.table-card{
-flex:1;
-overflow:auto;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-thead{
-background:rgba(255,255,255,0.05);
-}
-
-th{
-padding:18px;
-text-align:left;
-font-size:13px;
-color:#8ca0d7;
-}
-
-td{
-padding:20px 18px;
-border-bottom:1px solid rgba(255,255,255,0.05);
-font-size:14px;
-vertical-align:top;
-}
-
-.domain{
-font-size:18px;
-font-weight:700;
-}
-
-.small{
-font-size:12px;
-color:#8ca0d7;
-margin-top:5px;
-}
-
-.status{
-padding:8px 14px;
-border-radius:12px;
-font-size:12px;
-font-weight:700;
-display:inline-block;
-}
-
-.ok{
-background:#073d22;
-color:#4ade80;
-}
-
-.error{
-background:#3f1010;
-color:#ff6b6b;
-}
-
-.copy-btn{
-position:absolute;
-top:25px;
-right:90px;
-width:42px;
-height:42px;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(255,255,255,0.04);
-border:1px solid rgba(255,255,255,0.06);
-cursor:pointer;
-}
-
-.export-btn{
-position:absolute;
-top:25px;
-right:30px;
-width:42px;
-height:42px;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(255,255,255,0.04);
-border:1px solid rgba(255,255,255,0.06);
-cursor:pointer;
-}
-
-@media(max-width:1100px){
-
-body{
-overflow:auto;
-height:auto;
-}
-
-.container{
-flex-direction:column;
-height:auto;
-}
-
-.sidebar{
-width:100%;
-}
-
-}
-
+.edit-btn{background:#22c55e;margin-left:5px}
+.search{margin-top:10px}
+.user-title{margin-top:15px;font-size:18px}
 </style>
 </head>
+
 <body>
 
-<div class="container">
-
 <div class="sidebar">
+  <div class="logo">TEAM SYSTEM PRO MAX</div>
 
-<div>
+  <div class="menu">
+    <div onclick="UI.show('dashboard')">📊 Dashboard</div>
+    <div onclick="UI.show('users')">👥 Users</div>
+    <div onclick="UI.show('projects')">📁 Projects</div>
+  </div>
 
-<h1>DNS Records Checker</h1>
-
-<div class="subtitle">
-High-performance bulk analysis for SPF and MX records.
-</div>
-
-<div class="card">
-
-<label class="label">🌐 Domains (one per line)</label>
-
-<textarea id="domains">
-google.com
-github.com
-vercel.com
-openai.com
-</textarea>
-
-<div class="option">
-<span>🛡️ Check SPF</span>
-<div class="switch active" id="spfSwitch"></div>
-</div>
-
-<div class="option">
-<span>📨 Check MX</span>
-<div class="switch active" id="mxSwitch"></div>
-</div>
-
-<button id="scanBtn">
-Check Records ⚡
-</button>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="stats">
-
-<div class="stat">
-<h2 id="totalDomains">0</h2>
-<p>DOMAINS</p>
-</div>
-
-<div class="stat">
-<h2 style="color:#4ade80;" id="successDomains">0</h2>
-<p>SUCCESS</p>
-</div>
-
-</div>
-
-</div>
-
+  <div class="logout" id="logoutBtn">🚪 Logout</div>
 </div>
 
 <div class="main">
 
-<div class="copy-btn" onclick="copyResults()">
-📋
+<div id="dashboard" class="section active">
+  <h2>Dashboard</h2>
+  <div id="stats"></div>
 </div>
 
-<div class="export-btn" onclick="exportTXT()">
-⬇️
+<div id="users" class="section">
+  <h2>Users</h2>
+  <div class="box">
+    <input id="uName" placeholder="username">
+    <button onclick="App.addUser()">Add</button>
+    <div id="userList"></div>
+  </div>
 </div>
 
-<div class="progress-box">
+<div id="projects" class="section">
+  <h2>Projects</h2>
 
-<div class="progress-top">
-<span>Scanning Progress</span>
-<span id="progressText">0%</span>
-</div>
+  <div class="box">
+    <input id="username" placeholder="username">
+    <input id="object" placeholder="project name">
+    <input id="link" placeholder="link">
+    <button onclick="App.addProject()">Add</button>
 
-<div class="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
+    <input id="search" class="search" placeholder="🔍 search...">
 
-</div>
-
-<div class="filters">
-<div class="filter-btn active">All Results</div>
-<div class="filter-btn">Has SPF</div>
-<div class="filter-btn">Has MX</div>
-<div class="filter-btn">Errors</div>
-</div>
-
-<div class="card table-card">
-
-<table>
-
-<thead>
-<tr>
-<th>DOMAIN</th>
-<th>SPF RECORD</th>
-<th>MX RECORDS</th>
-<th>STATUS</th>
-</tr>
-</thead>
-
-<tbody id="resultsBody">
-
-</tbody>
-
-</table>
-
+    <div id="projectList"></div>
+  </div>
 </div>
 
 </div>
 
-</div>
+<script type="module">
 
-<script>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-const spfSwitch = document.getElementById('spfSwitch');
-const mxSwitch = document.getElementById('mxSwitch');
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-spfSwitch.onclick = () => {
-spfSwitch.classList.toggle('active');
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* CONFIG */
+const firebaseConfig = {
+  apiKey: "XXXX",
+  authDomain: "XXXX",
+  projectId: "XXXX",
+  appId: "XXXX"
 };
 
-mxSwitch.onclick = () => {
-mxSwitch.classList.toggle('active');
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+
+/* DOM */
+const DOM = {
+  uName: document.getElementById("uName"),
+  username: document.getElementById("username"),
+  object: document.getElementById("object"),
+  link: document.getElementById("link"),
+  userList: document.getElementById("userList"),
+  projectList: document.getElementById("projectList"),
+  logoutBtn: document.getElementById("logoutBtn"),
+  stats: document.getElementById("stats"),
+  search: document.getElementById("search")
 };
 
-const resultsBody = document.getElementById('resultsBody');
-const progressBar = document.getElementById('progressBar');
-const progressText = document.getElementById('progressText');
+/* APP */
+const App = {
 
-const totalDomains = document.getElementById('totalDomains');
-const successDomains = document.getElementById('successDomains');
+  addUser: async function(){
+    if(!DOM.uName.value) return;
 
-document.getElementById('scanBtn').onclick = async () => {
+    await addDoc(collection(db,"users"),{
+      name: DOM.uName.value
+    });
 
-resultsBody.innerHTML = '';
+    DOM.uName.value="";
+    loadAll();
+  },
 
-const domains = document.getElementById('domains')
-.value
-.split('\n')
-.map(d => d.trim())
-.filter(Boolean);
+  addProject: async function(){
+    if(!DOM.username.value || !DOM.object.value || !DOM.link.value) return;
 
-totalDomains.innerText = domains.length;
+    const usersSnap = await getDocs(collection(db,"users"));
+    let userId=null;
 
-let success = 0;
+    usersSnap.forEach(u=>{
+      if(u.data().name === DOM.username.value){
+        userId = u.id;
+      }
+    });
 
-for(let i=0;i<domains.length;i++){
+    if(!userId){
+      alert("User not found");
+      return;
+    }
 
-const domain = domains[i];
+    await addDoc(collection(db,"users",userId,"projects"),{
+      object: DOM.object.value,
+      link: DOM.link.value,
+      createdAt: Date.now()
+    });
 
-const progress = Math.round(((i+1)/domains.length)*100);
+    DOM.username.value="";
+    DOM.object.value="";
+    DOM.link.value="";
+    loadAll();
+  },
 
-progressBar.style.width = progress + '%';
-progressText.innerText = progress + '%';
+  deleteProject: async function(uid,pid){
+    await deleteDoc(doc(db,"users",uid,"projects",pid));
+    loadAll();
+  },
 
-await new Promise(r => setTimeout(r,400));
+  editProject: async function(uid,pid){
+    let val = prompt("New name:");
+    if(!val) return;
 
-const spf = spfSwitch.classList.contains('active')
-? `v=spf1 include:_spf.${domain} ~all`
-: '-';
+    await updateDoc(doc(db,"users",uid,"projects",pid),{
+      object: val
+    });
 
-const mx = mxSwitch.classList.contains('active')
-? `mail.${domain}`
-: '-';
+    loadAll();
+  },
 
-success++;
-
-successDomains.innerText = success;
-
-resultsBody.innerHTML += `
-
-<tr>
-
-<td>
-<div class="domain">${domain}</div>
-<div class="small">${Math.floor(Math.random()*50)+10}ms</div>
-</td>
-
-<td>${spf}</td>
-
-<td>${mx}</td>
-
-<td>
-<span class="status ok">● OK</span>
-</td>
-
-</tr>
-
-`;
-
-}
-
+  logout: function(){
+    signOut(auth);
+  }
 };
 
-function copyResults(){
+/* UI */
+const UI = {
+  show: function(page){
+    document.querySelectorAll(".section")
+      .forEach(s=>s.classList.remove("active"));
 
-let text = '';
+    document.getElementById(page).classList.add("active");
+  }
+};
 
-document.querySelectorAll('#resultsBody tr').forEach(row=>{
+/* AUTH */
+onAuthStateChanged(auth,user=>{
+  if(!user){
+    let email = prompt("Email:");
+    let pass = prompt("Password:");
 
-const cols = row.querySelectorAll('td');
-
-text +=
-cols[0].innerText + ' | ' +
-cols[1].innerText + ' | ' +
-cols[2].innerText + '\n';
-
+    signInWithEmailAndPassword(auth,email,pass)
+      .catch(()=> alert("Login failed"));
+  }
 });
 
-navigator.clipboard.writeText(text);
+/* LOAD EVERYTHING */
+async function loadAll(){
 
-alert('Results copied');
+  DOM.projectList.innerHTML="";
+  DOM.userList.innerHTML="";
+  let total = 0;
 
+  const usersSnap = await getDocs(collection(db,"users"));
+
+  for(const user of usersSnap.docs){
+
+    let u = user.data();
+
+    DOM.userList.innerHTML += `<div class="card">👤 ${u.name}</div>`;
+
+    DOM.projectList.innerHTML += `
+      <div class="card">
+        <div class="user-title">👤 ${u.name}</div>
+        <div id="u-${user.id}"></div>
+      </div>
+    `;
+
+    const projSnap = await getDocs(collection(db,"users",user.id,"projects"));
+
+    projSnap.forEach(p=>{
+      total++;
+
+      let d = p.data();
+
+      document.getElementById(`u-${user.id}`).innerHTML += `
+        <div style="margin-top:8px;padding:8px;background:#111827;border-radius:8px">
+          🧠 ${d.object}<br>
+          🔗 <a href="${d.link}" target="_blank">Open</a><br>
+          <button onclick="App.deleteProject('${user.id}','${p.id}')">❌</button>
+          <button class="edit-btn" onclick="App.editProject('${user.id}','${p.id}')">✏️</button>
+        </div>
+      `;
+    });
+  }
+
+  DOM.stats.innerHTML = `<p>Total Projects: ${total}</p>`;
 }
 
-function exportTXT(){
+/* SEARCH */
+DOM.search.addEventListener("input", e=>{
+  let val = e.target.value.toLowerCase();
 
-let text = '';
-
-document.querySelectorAll('#resultsBody tr').forEach(row=>{
-
-const cols = row.querySelectorAll('td');
-
-text +=
-cols[0].innerText + ' | ' +
-cols[1].innerText + ' | ' +
-cols[2].innerText + '\n';
-
+  document.querySelectorAll("#projectList .card")
+    .forEach(c=>{
+      c.style.display =
+        c.innerText.toLowerCase().includes(val)
+        ? "block" : "none";
+    });
 });
 
-const blob = new Blob([text], {type:'text/plain'});
+/* INIT */
+loadAll();
 
-const a = document.createElement('a');
-
-a.href = URL.createObjectURL(blob);
-
-a.download = 'dns_results.txt';
-
-a.click();
-
-}
+window.App = App;
+window.UI = UI;
 
 </script>
 
 </body>
 </html>
+```
