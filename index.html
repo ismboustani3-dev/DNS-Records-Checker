@@ -1,6 +1,3 @@
-# DNS Records Checker Project
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -416,6 +413,16 @@ microsoft.com
         <div class="progress-fill" id="progressFill"></div>
       </div>
 
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
+        <button onclick="copyResults()" class="filter-btn active">
+          📋 Copy Results
+        </button>
+
+        <button onclick="downloadCSV()" class="filter-btn active">
+          ⬇ Download CSV
+        </button>
+      </div>
+
       <div class="filters">
         <button class="filter-btn active">All Results</button>
         <button class="filter-btn">Has SPF</button>
@@ -547,50 +554,58 @@ async function checkRecords(){
   }
 }
 
+function copyResults(){
+  const rows = document.querySelectorAll('#resultsBody tr');
+
+  let text = 'DOMAIN | SPF | MX | STATUS
+
+';
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll('td');
+
+    text += `${cols[0].innerText.replace('
+',' ')} | ${cols[1].innerText} | ${cols[2].innerText.replace('
+',', ')} | ${cols[3].innerText}
+`;
+  });
+
+  navigator.clipboard.writeText(text);
+
+  alert('Results copied successfully');
+}
+
+function downloadCSV(){
+  const rows = document.querySelectorAll('#resultsBody tr');
+
+  let csv = 'Domain,SPF Record,MX Records,Status
+';
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll('td');
+
+    const domain = cols[0].querySelector('.domain').innerText;
+    const spf = cols[1].innerText.replace(/,/g,' ');
+    const mx = cols[2].innerText.replace(/,/g,' ');
+    const status = cols[3].innerText;
+
+    csv += `"${domain}","${spf}","${mx}","${status}"
+`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'dns-results.csv';
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
 checkRecords();
 </script>
 
 </body>
 </html>
-```
-
-# Features
-
-* Modern dark cyber UI
-* SPF checker
-* MX checker
-* Progress bar
-* Bulk domain scan
-* Live results table
-* Responsive design
-* Google DNS API integration
-* Success statistics
-* Animated interface
-
-# How To Run
-
-1. Save file as:
-
-```bash
-index.html
-```
-
-2. Open in browser.
-
-OR
-
-3. Upload to:
-
-* Vercel
-* Netlify
-* GitHub Pages
-
-# Important
-
-This project uses:
-
-```bash
-https://dns.google/resolve
-```
-
-for real DNS checking.
