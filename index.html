@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>DNS Records Checker</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 *{
@@ -17,22 +16,10 @@
 }
 
 body{
-  font-family:'Inter',sans-serif;
+  font-family:Segoe UI,sans-serif;
   background:#050816;
   color:white;
   min-height:100vh;
-  overflow-x:hidden;
-}
-
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at top left,#2448ff33,transparent 30%),
-    radial-gradient(circle at top right,#8b5cf633,transparent 30%),
-    radial-gradient(circle at bottom,#0ea5e933,transparent 30%);
-  pointer-events:none;
 }
 
 .container{
@@ -42,22 +29,15 @@ body::before{
   padding:30px 0;
 }
 
-.top{
-  margin-bottom:30px;
-}
-
 .title{
-  font-size:52px;
+  font-size:50px;
   font-weight:800;
-  background:linear-gradient(to right,#ffffff,#6ea8ff,#8b5cf6);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  margin-bottom:10px;
 }
 
 .subtitle{
-  margin-top:8px;
   color:#94a3b8;
-  font-size:18px;
+  margin-bottom:30px;
 }
 
 .grid{
@@ -67,25 +47,18 @@ body::before{
 }
 
 .card{
-  background:rgba(15,23,42,.8);
-  border:1px solid rgba(255,255,255,.07);
+  background:#0f172a;
+  border:1px solid rgba(255,255,255,.05);
   border-radius:24px;
-  backdrop-filter:blur(12px);
-  box-shadow:0 10px 40px rgba(0,0,0,.4);
 }
 
 .left-panel{
   padding:24px;
-  height:fit-content;
 }
 
 .label{
-  color:#cbd5e1;
-  font-size:15px;
   margin-bottom:14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
+  color:#cbd5e1;
 }
 
 textarea{
@@ -97,34 +70,22 @@ textarea{
   padding:18px;
   resize:none;
   color:white;
-  font-size:15px;
   outline:none;
-}
-
-textarea:focus{
-  border-color:#4f46e5;
-  box-shadow:0 0 20px rgba(79,70,229,.3);
 }
 
 .option{
   margin-top:16px;
   background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
   border-radius:16px;
   padding:18px;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-}
-
-.option span{
-  color:#e2e8f0;
-  font-weight:500;
+  align-items:center;
 }
 
 .switch{
   position:relative;
-  width:56px;
+  width:55px;
   height:30px;
 }
 
@@ -135,10 +96,9 @@ textarea:focus{
 .slider{
   position:absolute;
   inset:0;
-  border-radius:50px;
   background:#1e293b;
+  border-radius:30px;
   cursor:pointer;
-  transition:.3s;
 }
 
 .slider::before{
@@ -148,17 +108,17 @@ textarea:focus{
   position:absolute;
   top:4px;
   left:4px;
-  border-radius:50%;
   background:white;
+  border-radius:50%;
   transition:.3s;
 }
 
 .switch input:checked + .slider{
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  background:#4f46e5;
 }
 
 .switch input:checked + .slider::before{
-  transform:translateX(26px);
+  transform:translateX(25px);
 }
 
 .btn{
@@ -167,18 +127,11 @@ textarea:focus{
   padding:18px;
   border:none;
   border-radius:18px;
-  background:linear-gradient(135deg,#2563eb,#4f46e5,#7c3aed);
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
   color:white;
   font-size:18px;
   font-weight:700;
   cursor:pointer;
-  transition:.3s;
-  box-shadow:0 10px 30px rgba(79,70,229,.4);
-}
-
-.btn:hover{
-  transform:translateY(-3px);
-  box-shadow:0 15px 35px rgba(79,70,229,.5);
 }
 
 .stats{
@@ -192,19 +145,16 @@ textarea:focus{
   padding:24px;
   border-radius:20px;
   text-align:center;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
+  background:#0f172a;
 }
 
 .stat-box h2{
-  font-size:38px;
-  margin-bottom:10px;
+  font-size:36px;
+  margin-bottom:8px;
 }
 
 .stat-box p{
   color:#94a3b8;
-  font-size:14px;
-  letter-spacing:1px;
 }
 
 .right-panel{
@@ -214,9 +164,7 @@ textarea:focus{
 .progress-title{
   display:flex;
   justify-content:space-between;
-  align-items:center;
   margin-bottom:12px;
-  color:#cbd5e1;
 }
 
 .progress-bar{
@@ -225,63 +173,44 @@ textarea:focus{
   background:#0f172a;
   border-radius:30px;
   overflow:hidden;
-  margin-bottom:22px;
+  margin-bottom:24px;
 }
 
 .progress-fill{
   width:0%;
   height:100%;
-  border-radius:30px;
   background:linear-gradient(to right,#2563eb,#8b5cf6);
-  transition:.4s;
 }
 
 .filters{
   display:flex;
   gap:12px;
   margin-bottom:24px;
-  flex-wrap:wrap;
 }
 
 .filter-btn{
   padding:10px 16px;
   border-radius:12px;
-  background:#0f172a;
-  border:1px solid rgba(255,255,255,.08);
-  color:#cbd5e1;
-  cursor:pointer;
-}
-
-.filter-btn.active{
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  background:#111827;
+  border:none;
   color:white;
-}
-
-.table-wrap{
-  overflow-x:auto;
 }
 
 .table{
   width:100%;
   border-collapse:collapse;
-  min-width:850px;
-}
-
-.table thead{
-  background:rgba(255,255,255,.04);
 }
 
 .table th{
-  padding:18px;
   text-align:left;
+  padding:18px;
   color:#94a3b8;
   font-size:14px;
 }
 
 .table td{
-  padding:22px 18px;
+  padding:20px 18px;
   border-top:1px solid rgba(255,255,255,.05);
-  font-size:14px;
 }
 
 .domain{
@@ -291,14 +220,11 @@ textarea:focus{
 
 .small{
   color:#64748b;
-  margin-top:6px;
+  margin-top:5px;
   font-size:12px;
 }
 
 .badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
   padding:8px 14px;
   border-radius:12px;
   font-size:13px;
@@ -308,32 +234,16 @@ textarea:focus{
 .ok{
   background:#052e16;
   color:#4ade80;
-  border:1px solid #166534;
 }
 
 .error{
   background:#450a0a;
   color:#f87171;
-  border:1px solid #991b1b;
-}
-
-.loading{
-  animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-  0%{opacity:.5}
-  50%{opacity:1}
-  100%{opacity:.5}
 }
 
 @media(max-width:1000px){
   .grid{
     grid-template-columns:1fr;
-  }
-
-  .title{
-    font-size:38px;
   }
 }
 </style>
@@ -342,26 +252,22 @@ textarea:focus{
 
 <div class="container">
 
-  <div class="top">
-    <h1 class="title">DNS Records Checker</h1>
-    <p class="subtitle">High-performance bulk analysis for SPF and MX records.</p>
-  </div>
+  <h1 class="title">DNS Records Checker</h1>
+  <p class="subtitle">
+    High-performance bulk analysis for SPF and MX records.
+  </p>
 
   <div class="grid">
 
     <div>
+
       <div class="card left-panel">
 
         <div class="label">
           🌐 Domains (one per line)
         </div>
 
-        <textarea id="domains">
-google.com
-facebook.com
-yahoo.com
-microsoft.com
-        </textarea>
+        <textarea id="domains">google.com</textarea>
 
         <div class="option">
           <span>🛡️ Check SPF</span>
@@ -389,17 +295,18 @@ microsoft.com
 
       <div class="stats">
 
-        <div class="stat-box card">
+        <div class="stat-box">
           <h2 id="domainsCount">0</h2>
           <p>DOMAINS</p>
         </div>
 
-        <div class="stat-box card">
+        <div class="stat-box">
           <h2 id="successCount" style="color:#4ade80">0</h2>
           <p>SUCCESS</p>
         </div>
 
       </div>
+
     </div>
 
     <div class="card right-panel">
@@ -413,40 +320,28 @@ microsoft.com
         <div class="progress-fill" id="progressFill"></div>
       </div>
 
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
-        <button onclick="copyResults()" class="filter-btn active">
-          📋 Copy Results
-        </button>
-
-        <button onclick="downloadCSV()" class="filter-btn active">
-          ⬇ Download CSV
-        </button>
-      </div>
-
       <div class="filters">
-        <button class="filter-btn active">All Results</button>
+        <button class="filter-btn">All Results</button>
         <button class="filter-btn">Has SPF</button>
         <button class="filter-btn">Has MX</button>
         <button class="filter-btn">Errors</button>
       </div>
 
-      <div class="table-wrap">
-        <table class="table">
+      <table class="table">
 
-          <thead>
-            <tr>
-              <th>DOMAIN</th>
-              <th>SPF RECORD</th>
-              <th>MX RECORDS</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
+        <thead>
+          <tr>
+            <th>DOMAIN</th>
+            <th>SPF RECORD</th>
+            <th>MX RECORDS</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
 
-          <tbody id="resultsBody">
-          </tbody>
+        <tbody id="resultsBody">
+        </tbody>
 
-        </table>
-      </div>
+      </table>
 
     </div>
 
@@ -462,11 +357,19 @@ const domainsCount = document.getElementById('domainsCount');
 const successCount = document.getElementById('successCount');
 
 async function getDNS(domain, type){
+
   try{
-    const response = await fetch(`https://dns.google/resolve?name=${domain}&type=${type}`);
+
+    const response = await fetch(
+      `https://dns.google/resolve?name=${domain}&type=${type}`
+    );
+
     const data = await response.json();
+
     return data.Answer || [];
+
   }catch(err){
+
     return [];
   }
 }
@@ -482,8 +385,11 @@ async function checkRecords(){
     .map(d => d.trim())
     .filter(Boolean);
 
-  const checkSPF = document.getElementById('spfToggle').checked;
-  const checkMX = document.getElementById('mxToggle').checked;
+  const checkSPF =
+    document.getElementById('spfToggle').checked;
+
+  const checkMX =
+    document.getElementById('mxToggle').checked;
 
   domainsCount.innerText = domains.length;
 
@@ -493,16 +399,22 @@ async function checkRecords(){
 
     const domain = domains[i];
 
-    progressFill.style.width = `${((i+1)/domains.length)*100}%`;
-    progressText.innerText = `${Math.floor(((i+1)/domains.length)*100)}%`;
+    progressFill.style.width =
+      `${((i+1)/domains.length)*100}%`;
+
+    progressText.innerText =
+      `${Math.floor(((i+1)/domains.length)*100)}%`;
 
     let spfResult = '-';
     let mxResult = '-';
+
     let status = 'ERROR';
     let statusClass = 'error';
 
     if(checkSPF){
-      const txtRecords = await getDNS(domain,'TXT');
+
+      const txtRecords =
+        await getDNS(domain,'TXT');
 
       const spf = txtRecords.find(r =>
         r.data.toLowerCase().includes('v=spf1')
@@ -514,9 +426,12 @@ async function checkRecords(){
     }
 
     if(checkMX){
-      const mxRecords = await getDNS(domain,'MX');
+
+      const mxRecords =
+        await getDNS(domain,'MX');
 
       if(mxRecords.length > 0){
+
         mxResult = mxRecords
           .map(mx => mx.data)
           .join('<br>');
@@ -524,8 +439,10 @@ async function checkRecords(){
     }
 
     if(spfResult !== '-' || mxResult !== '-'){
+
       status = 'OK';
       statusClass = 'ok';
+
       success++;
     }
 
@@ -536,7 +453,9 @@ async function checkRecords(){
     tr.innerHTML = `
       <td>
         <div class="domain">${domain}</div>
-        <div class="small">${Math.floor(Math.random()*50)+5}ms</div>
+        <div class="small">
+          ${Math.floor(Math.random()*50)+5}ms
+        </div>
       </td>
 
       <td>${spfResult}</td>
@@ -552,56 +471,6 @@ async function checkRecords(){
 
     resultsBody.appendChild(tr);
   }
-}
-
-function copyResults(){
-  const rows = document.querySelectorAll('#resultsBody tr');
-
-  let text = 'DOMAIN | SPF | MX | STATUS
-
-';
-
-  rows.forEach(row => {
-    const cols = row.querySelectorAll('td');
-
-    text += `${cols[0].innerText.replace('
-',' ')} | ${cols[1].innerText} | ${cols[2].innerText.replace('
-',', ')} | ${cols[3].innerText}
-`;
-  });
-
-  navigator.clipboard.writeText(text);
-
-  alert('Results copied successfully');
-}
-
-function downloadCSV(){
-  const rows = document.querySelectorAll('#resultsBody tr');
-
-  let csv = 'Domain,SPF Record,MX Records,Status
-';
-
-  rows.forEach(row => {
-    const cols = row.querySelectorAll('td');
-
-    const domain = cols[0].querySelector('.domain').innerText;
-    const spf = cols[1].innerText.replace(/,/g,' ');
-    const mx = cols[2].innerText.replace(/,/g,' ');
-    const status = cols[3].innerText;
-
-    csv += `"${domain}","${spf}","${mx}","${status}"
-`;
-  });
-
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'dns-results.csv';
-  a.click();
-
-  URL.revokeObjectURL(url);
 }
 
 checkRecords();
