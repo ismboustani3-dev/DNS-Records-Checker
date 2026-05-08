@@ -6,9 +6,6 @@
 
 <title>DNS Records Checker Pro</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <style>
 *{
   margin:0;
@@ -40,7 +37,7 @@ body::before{
 
 .container{
   width:95%;
-  max-width:1550px;
+  max-width:1600px;
   margin:auto;
   padding:35px 0;
 }
@@ -231,7 +228,7 @@ textarea:focus{
   width:0%;
   height:100%;
   background:linear-gradient(to right,#2563eb,#8b5cf6);
-  transition:.3s;
+  transition:.2s;
 }
 
 .actions{
@@ -263,7 +260,7 @@ textarea:focus{
 .table{
   width:100%;
   border-collapse:collapse;
-  min-width:1000px;
+  min-width:1200px;
 }
 
 .table thead{
@@ -280,6 +277,7 @@ textarea:focus{
 .table td{
   padding:22px 18px;
   border-top:1px solid rgba(255,255,255,.05);
+  vertical-align:top;
 }
 
 .table tbody tr{
@@ -340,11 +338,15 @@ textarea:focus{
 <div class="container">
 
   <div class="top">
-    <h1 class="title">DNS Records Checker</h1>
+
+    <h1 class="title">
+      DNS Records Checker
+    </h1>
 
     <p class="subtitle">
-      SPF • MX • DMARC Bulk Scanner
+      SPF • MX • DMARC Ultra Fast Bulk Scanner
     </p>
+
   </div>
 
   <div class="grid">
@@ -359,8 +361,8 @@ textarea:focus{
 
 <textarea id="domains">google.com
 facebook.com
-yahoo.com
-microsoft.com</textarea>
+microsoft.com
+yahoo.com</textarea>
 
         <div class="option">
           <span>🛡️ Check SPF Records</span>
@@ -498,6 +500,9 @@ async function checkRecords(){
 
   resultsBody.innerHTML = '';
 
+  progressFill.style.width = '0%';
+  progressText.innerText = '0%';
+
   const domains =
     document
       .getElementById('domains')
@@ -518,10 +523,9 @@ async function checkRecords(){
   domainsCount.innerText = domains.length;
 
   let success = 0;
+  let completed = 0;
 
-  for(let i=0;i<domains.length;i++){
-
-    const domain = domains[i];
+  const tasks = domains.map(async domain => {
 
     let spfResult = '-';
     let mxResult = '-';
@@ -530,10 +534,56 @@ async function checkRecords(){
     let status = 'ERROR';
     let statusClass = 'error';
 
+    const start = performance.now();
+
+    const requests = [];
+
     if(checkSPF){
 
-      const txtRecords =
-        await getDNS(domain,'TXT');
+      requests.push(
+        getDNS(domain,'TXT')
+      );
+
+    }else{
+
+      requests.push(
+        Promise.resolve([])
+      );
+    }
+
+    if(checkMX){
+
+      requests.push(
+        getDNS(domain,'MX')
+      );
+
+    }else{
+
+      requests.push(
+        Promise.resolve([])
+      );
+    }
+
+    if(checkDMARC){
+
+      requests.push(
+        getDNS(`_dmarc.${domain}`,'TXT')
+      );
+
+    }else{
+
+      requests.push(
+        Promise.resolve([])
+      );
+    }
+
+    const [
+      txtRecords,
+      mxRecords,
+      dmarcRecords
+    ] = await Promise.all(requests);
+
+    if(checkSPF){
 
       const spf =
         txtRecords.find(r =>
@@ -552,9 +602,6 @@ async function checkRecords(){
 
     if(checkMX){
 
-      const mxRecords =
-        await getDNS(domain,'MX');
-
       if(mxRecords.length > 0){
 
         mxResult =
@@ -565,9 +612,6 @@ async function checkRecords(){
     }
 
     if(checkDMARC){
-
-      const dmarcRecords =
-        await getDNS(`_dmarc.${domain}`,'TXT');
 
       const dmarc =
         dmarcRecords.find(r =>
@@ -596,22 +640,34 @@ async function checkRecords(){
       success++;
     }
 
+    completed++;
+
     successCount.innerText = success;
 
     progressFill.style.width =
-      `${((i+1)/domains.length)*100}%`;
+      `${(completed/domains.length)*100}%`;
 
     progressText.innerText =
-      `${Math.floor(((i+1)/domains.length)*100)}%`;
+      `${Math.floor(
+        (completed/domains.length)*100
+      )}%`;
 
-    const tr = document.createElement('tr');
+    const duration =
+      Math.round(
+        performance.now() - start
+      );
+
+    const tr =
+      document.createElement('tr');
 
     tr.innerHTML = `
       <td>
-        <div class="domain">${domain}</div>
+        <div class="domain">
+          ${domain}
+        </div>
 
         <div class="small">
-          ${Math.floor(Math.random()*40)+10}ms
+          ${duration}ms
         </div>
       </td>
 
@@ -629,13 +685,17 @@ async function checkRecords(){
     `;
 
     resultsBody.appendChild(tr);
-  }
+  });
+
+  await Promise.all(tasks);
 }
 
 function copyResults(){
 
   const rows =
-    document.querySelectorAll('#resultsBody tr');
+    document.querySelectorAll(
+      '#resultsBody tr'
+    );
 
   let text =
     'DOMAIN | SPF | MX | DMARC | STATUS\n\n';
@@ -646,13 +706,17 @@ function copyResults(){
       row.querySelectorAll('td');
 
     const domain =
-      cols[0].querySelector('.domain').innerText;
+      cols[0]
+        .querySelector('.domain')
+        .innerText;
 
     const spf =
       cols[1].innerText;
 
     const mx =
-      cols[2].innerText.replace(/\n/g,', ');
+      cols[2]
+        .innerText
+        .replace(/\n/g,', ');
 
     const dmarc =
       cols[3].innerText;
@@ -661,7 +725,8 @@ function copyResults(){
       cols[4].innerText;
 
     text +=
-      `${domain} | ${spf} | ${mx} | ${dmarc} | ${status}\n`;
+`${domain} | ${spf} | ${mx} | ${dmarc} | ${status}\n`;
+
   });
 
   navigator.clipboard.writeText(text);
@@ -672,10 +737,12 @@ function copyResults(){
 function downloadCSV(){
 
   const rows =
-    document.querySelectorAll('#resultsBody tr');
+    document.querySelectorAll(
+      '#resultsBody tr'
+    );
 
   let csv =
-    'Domain,SPF Record,MX Records,DMARC Record,Status\n';
+'Domain,SPF Record,MX Records,DMARC Record,Status\n';
 
   rows.forEach(row => {
 
@@ -683,24 +750,32 @@ function downloadCSV(){
       row.querySelectorAll('td');
 
     const domain =
-      cols[0].querySelector('.domain').innerText;
+      cols[0]
+        .querySelector('.domain')
+        .innerText;
 
     const spf =
-      cols[1].innerText.replace(/,/g,' ');
+      cols[1]
+        .innerText
+        .replace(/,/g,' ');
 
     const mx =
-      cols[2].innerText
+      cols[2]
+        .innerText
         .replace(/\n/g,' | ')
         .replace(/,/g,' ');
 
     const dmarc =
-      cols[3].innerText.replace(/,/g,' ');
+      cols[3]
+        .innerText
+        .replace(/,/g,' ');
 
     const status =
       cols[4].innerText;
 
     csv +=
-      `"${domain}","${spf}","${mx}","${dmarc}","${status}"\n`;
+`"${domain}","${spf}","${mx}","${dmarc}","${status}"\n`;
+
   });
 
   const blob =
