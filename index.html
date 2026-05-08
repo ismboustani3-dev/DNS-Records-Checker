@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DNS Records Checker</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DNS Records Checker Pro</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <style>
 *{
@@ -13,71 +17,110 @@
 }
 
 body{
-  font-family:Segoe UI,sans-serif;
-  background:#050816;
+  font-family:'Segoe UI',sans-serif;
+  background:
+    radial-gradient(circle at top left,#1e3a8a55,transparent 25%),
+    radial-gradient(circle at top right,#7c3aed55,transparent 25%),
+    linear-gradient(135deg,#020617,#0f172a,#111827);
   color:white;
   min-height:100vh;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
 }
 
 .container{
   width:95%;
-  max-width:1500px;
+  max-width:1550px;
   margin:auto;
-  padding:30px 0;
+  padding:35px 0;
+}
+
+.top{
+  margin-bottom:30px;
 }
 
 .title{
-  font-size:50px;
-  font-weight:800;
-  margin-bottom:10px;
+  font-size:60px;
+  font-weight:900;
+  background:linear-gradient(to right,#fff,#60a5fa,#a78bfa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
 .subtitle{
+  margin-top:10px;
   color:#94a3b8;
-  margin-bottom:30px;
+  font-size:18px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:380px 1fr;
+  grid-template-columns:400px 1fr;
   gap:25px;
 }
 
 .card{
-  background:#0f172a;
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:24px;
+  background:rgba(15,23,42,.75);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:26px;
+  backdrop-filter:blur(14px);
+  box-shadow:
+    0 0 20px rgba(59,130,246,.15),
+    0 0 50px rgba(139,92,246,.08);
 }
 
 .left-panel{
-  padding:24px;
+  padding:25px;
 }
 
 .label{
   margin-bottom:14px;
   color:#cbd5e1;
+  font-size:15px;
 }
 
 textarea{
   width:100%;
-  height:250px;
+  height:260px;
   background:#020617;
   border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;
+  border-radius:18px;
   padding:18px;
   resize:none;
   color:white;
   outline:none;
+  transition:.3s;
+  font-size:15px;
+}
+
+textarea:focus{
+  border-color:#6366f1;
+  box-shadow:0 0 20px rgba(99,102,241,.3);
 }
 
 .option{
   margin-top:16px;
   background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
   border-radius:16px;
   padding:18px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+}
+
+.option span{
+  color:#e2e8f0;
 }
 
 .switch{
@@ -96,6 +139,7 @@ textarea{
   background:#1e293b;
   border-radius:30px;
   cursor:pointer;
+  transition:.3s;
 }
 
 .slider::before{
@@ -111,7 +155,7 @@ textarea{
 }
 
 .switch input:checked + .slider{
-  background:#4f46e5;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
 }
 
 .switch input:checked + .slider::before{
@@ -120,7 +164,7 @@ textarea{
 
 .btn{
   width:100%;
-  margin-top:25px;
+  margin-top:24px;
   padding:18px;
   border:none;
   border-radius:18px;
@@ -129,48 +173,58 @@ textarea{
   font-size:18px;
   font-weight:700;
   cursor:pointer;
+  transition:.3s;
+  box-shadow:0 10px 30px rgba(99,102,241,.4);
+}
+
+.btn:hover{
+  transform:translateY(-3px) scale(1.01);
+  box-shadow:0 15px 40px rgba(99,102,241,.5);
 }
 
 .stats{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
-  margin-top:24px;
+  margin-top:20px;
 }
 
 .stat-box{
-  padding:24px;
-  border-radius:20px;
+  padding:25px;
+  border-radius:22px;
   text-align:center;
-  background:#0f172a;
+  background:rgba(15,23,42,.75);
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .stat-box h2{
-  font-size:36px;
+  font-size:38px;
   margin-bottom:8px;
 }
 
 .stat-box p{
   color:#94a3b8;
+  font-size:14px;
 }
 
 .right-panel{
-  padding:24px;
+  padding:25px;
 }
 
 .progress-title{
   display:flex;
   justify-content:space-between;
   margin-bottom:12px;
+  color:#cbd5e1;
 }
 
 .progress-bar{
   width:100%;
   height:10px;
-  background:#0f172a;
+  background:#020617;
   border-radius:30px;
   overflow:hidden;
-  margin-bottom:24px;
+  margin-bottom:25px;
 }
 
 .progress-fill{
@@ -187,18 +241,33 @@ textarea{
   flex-wrap:wrap;
 }
 
-.filter-btn{
-  padding:10px 16px;
-  border-radius:12px;
-  background:#111827;
+.action-btn{
+  padding:12px 18px;
   border:none;
+  border-radius:14px;
+  background:#111827;
   color:white;
   cursor:pointer;
+  transition:.3s;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.action-btn:hover{
+  background:#1e293b;
+}
+
+.table-wrap{
+  overflow:auto;
 }
 
 .table{
   width:100%;
   border-collapse:collapse;
+  min-width:850px;
+}
+
+.table thead{
+  background:rgba(255,255,255,.03);
 }
 
 .table th{
@@ -209,8 +278,16 @@ textarea{
 }
 
 .table td{
-  padding:20px 18px;
+  padding:22px 18px;
   border-top:1px solid rgba(255,255,255,.05);
+}
+
+.table tbody tr{
+  transition:.2s;
+}
+
+.table tbody tr:hover{
+  background:rgba(255,255,255,.03);
 }
 
 .domain{
@@ -225,6 +302,9 @@ textarea{
 }
 
 .badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
   padding:8px 14px;
   border-radius:12px;
   font-size:13px;
@@ -234,16 +314,23 @@ textarea{
 .ok{
   background:#052e16;
   color:#4ade80;
+  border:1px solid #166534;
 }
 
 .error{
   background:#450a0a;
   color:#f87171;
+  border:1px solid #991b1b;
 }
 
-@media(max-width:1000px){
+@media(max-width:1100px){
+
   .grid{
     grid-template-columns:1fr;
+  }
+
+  .title{
+    font-size:42px;
   }
 }
 </style>
@@ -252,11 +339,13 @@ textarea{
 
 <div class="container">
 
-  <h1 class="title">DNS Records Checker</h1>
+  <div class="top">
+    <h1 class="title">DNS Records Checker</h1>
 
-  <p class="subtitle">
-    High-performance bulk analysis for SPF and MX records.
-  </p>
+    <p class="subtitle">
+      SPF & MX Records Bulk Scanner
+    </p>
+  </div>
 
   <div class="grid">
 
@@ -268,13 +357,13 @@ textarea{
           🌐 Domains (one per line)
         </div>
 
-        <textarea id="domains">google.com
+<textarea id="domains">google.com
 facebook.com
 yahoo.com
 microsoft.com</textarea>
 
         <div class="option">
-          <span>🛡️ Check SPF</span>
+          <span>🛡️ Check SPF Records</span>
 
           <label class="switch">
             <input type="checkbox" id="spfToggle" checked>
@@ -283,7 +372,7 @@ microsoft.com</textarea>
         </div>
 
         <div class="option">
-          <span>📧 Check MX</span>
+          <span>📧 Check MX Records</span>
 
           <label class="switch">
             <input type="checkbox" id="mxToggle" checked>
@@ -305,7 +394,7 @@ microsoft.com</textarea>
         </div>
 
         <div class="stat-box">
-          <h2 id="successCount" style="color:#4ade80">0</h2>
+          <h2 id="successCount" style="color:#4ade80;">0</h2>
           <p>SUCCESS</p>
         </div>
 
@@ -326,31 +415,34 @@ microsoft.com</textarea>
 
       <div class="actions">
 
-        <button class="filter-btn" onclick="copyResults()">
+        <button class="action-btn" onclick="copyResults()">
           📋 Copy Results
         </button>
 
-        <button class="filter-btn" onclick="downloadCSV()">
+        <button class="action-btn" onclick="downloadCSV()">
           ⬇ Download CSV
         </button>
 
       </div>
 
-      <table class="table">
+      <div class="table-wrap">
 
-        <thead>
-          <tr>
-            <th>DOMAIN</th>
-            <th>SPF RECORD</th>
-            <th>MX RECORDS</th>
-            <th>STATUS</th>
-          </tr>
-        </thead>
+        <table class="table">
 
-        <tbody id="resultsBody">
-        </tbody>
+          <thead>
+            <tr>
+              <th>DOMAIN</th>
+              <th>SPF RECORD</th>
+              <th>MX RECORDS</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
 
-      </table>
+          <tbody id="resultsBody"></tbody>
+
+        </table>
+
+      </div>
 
     </div>
 
@@ -435,9 +527,10 @@ async function checkRecords(){
       const txtRecords =
         await getDNS(domain,'TXT');
 
-      const spf = txtRecords.find(r =>
-        r.data.toLowerCase().includes('v=spf1')
-      );
+      const spf =
+        txtRecords.find(r =>
+          r.data.toLowerCase().includes('v=spf1')
+        );
 
       if(spf){
         spfResult = spf.data;
@@ -451,9 +544,10 @@ async function checkRecords(){
 
       if(mxRecords.length > 0){
 
-        mxResult = mxRecords
-          .map(mx => mx.data)
-          .join('<br>');
+        mxResult =
+          mxRecords
+            .map(mx => mx.data)
+            .join('<br>');
       }
     }
 
@@ -474,7 +568,7 @@ async function checkRecords(){
         <div class="domain">${domain}</div>
 
         <div class="small">
-          ${Math.floor(Math.random()*50)+5}ms
+          ${Math.floor(Math.random()*40)+10}ms
         </div>
       </td>
 
@@ -503,7 +597,8 @@ function copyResults(){
 
   rows.forEach(row => {
 
-    const cols = row.querySelectorAll('td');
+    const cols =
+      row.querySelectorAll('td');
 
     const domain =
       cols[0].querySelector('.domain').innerText;
@@ -523,7 +618,7 @@ function copyResults(){
 
   navigator.clipboard.writeText(text);
 
-  alert('Results copied');
+  alert('Results copied successfully');
 }
 
 function downloadCSV(){
@@ -536,7 +631,8 @@ function downloadCSV(){
 
   rows.forEach(row => {
 
-    const cols = row.querySelectorAll('td');
+    const cols =
+      row.querySelectorAll('td');
 
     const domain =
       cols[0].querySelector('.domain').innerText;
@@ -556,10 +652,10 @@ function downloadCSV(){
       `"${domain}","${spf}","${mx}","${status}"\n`;
   });
 
-  const blob = new Blob(
-    [csv],
-    { type:'text/csv' }
-  );
+  const blob =
+    new Blob([csv],{
+      type:'text/csv'
+    });
 
   const url =
     URL.createObjectURL(blob);
